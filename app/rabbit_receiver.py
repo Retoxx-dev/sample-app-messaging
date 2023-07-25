@@ -2,6 +2,7 @@ import aio_pika
 import email_sender
 import settings
 
+
 class RabbitMQReceiver:
     def __init__(self, connection_string, queue_name):
         self.connection_string = connection_string
@@ -11,18 +12,17 @@ class RabbitMQReceiver:
         self.queue = None
 
     async def connect(self):
-        # Create a connection to RabbitMQ
         self.connection = await aio_pika.connect_robust(
             self.connection_string,
-            heartbeat=60,  # Set the heartbeat interval in seconds
+            heartbeat=60,
             on_connection_lost=self.on_connection_lost
         )
 
-        # Create a channel
         self.channel = await self.connection.channel()
 
-        # Declare the queue to consume messages from
         self.queue = await self.channel.declare_queue(self.queue_name, durable=True)
+
+        settings.logging.info("Connected to RabbitMQ.")
 
     async def receive_message(self):
         if not self.connection:
@@ -36,9 +36,12 @@ class RabbitMQReceiver:
                     print(f"Received message: {message_body}")
                     await email_sender.triage_email(message_body)
 
+        settings.logging.info("Received message")
+
     async def close(self):
         if self.connection:
             await self.connection.close()
-    
+        settings.logging.info("Closed RabbitMQ connection.")
+
     def on_connection_lost(self, connection, exception):
         settings.logging.warning(f"Connection to RabbitMQ lost: {exception}")

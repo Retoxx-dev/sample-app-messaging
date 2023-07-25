@@ -3,26 +3,28 @@ from azure.communication.email import EmailClient
 
 import settings
 
+
 def auth_type():
     if (settings.ENV == 'development'):
         email_client = EmailClient.from_connection_string(settings.EMAIL_CONNECTION_STRING)
         return email_client
 
+
 async def triage_email(message):
     data = json.loads(message)
     message_type = data['type']
     if message_type == 'welcome':
-        print(f" [x] Received {message_type} email request")
+        settings.logging.info(f" [x] Received {message_type} email request")
         await send_welcome_email(data)
     elif message_type == 'reset_password':
-        print(f" [x] Received {message_type} email request")
+        settings.logging.info(f" [x] Received {message_type} email request")
         await send_password_reset_email(data)
     else:
-        print(f" [x] Received unknown email request type {message_type}")
-        
-        
+        settings.logging.info(f" [x] Received unknown email request type {message_type}")
+
+
 async def send_welcome_email(data):
-    print(f" [x] Sending welcome email to {data['email_address']}")
+    settings.logging.info(f" [x] Sending welcome email to {data['email_address']}")
     message = {
         "content": {
             "subject": "Welcome to our service",
@@ -39,10 +41,11 @@ async def send_welcome_email(data):
         "senderAddress": f"{settings.SENDER_EMAIL}"
     }
     auth_type().begin_send(message)
-    print(f" [x] Welcome email sent to {data['email_address']}")
-    
+    settings.logging.info(f" [x] Welcome email sent to {data['email_address']}")
+
+
 async def send_password_reset_email(data):
-    print(f" [x] Sending password reset email to {data['email_address']}")
+    settings.logging.info(f" [x] Sending password reset email to {data['email_address']}")
     message = {
         "content": {
             "subject": "Password reset",
@@ -59,4 +62,4 @@ async def send_password_reset_email(data):
         "senderAddress": f"{settings.SENDER_EMAIL}"
     }
     auth_type().begin_send(message)
-    print(f" [x] Password reset email sent to {data['email_address']}")
+    settings.logging.info(f" [x] Password reset email sent to {data['email_address']}")

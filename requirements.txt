@@ -1,2 +1,4 @@
 azure-communication-email==1.0.0
 aio-pika==9.1.4
+fastapi
+uvicorn[standard]
