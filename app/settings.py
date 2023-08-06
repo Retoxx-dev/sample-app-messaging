@@ -4,7 +4,8 @@ import logging
 MANDATORY_ENV_VARS = ['RABBITMQ_CONNECTION_STRING',
                       'RABBITMQ_QUEUE_NAME',
                       'SENDER_EMAIL',
-                      'EMAIL_CONNECTION_STRING'
+                      'EMAIL_CONNECTION_STRING',
+                      'CLIENT_URL'
                       ]
 
 
@@ -20,6 +21,8 @@ SENDER_EMAIL = environ.get('SENDER_EMAIL')
 
 RABBITMQ_CONNECTION_STRING = environ.get('RABBITMQ_CONNECTION_STRING')
 RABBITMQ_QUEUE_NAME = environ.get('RABBITMQ_QUEUE_NAME')
+
+CLIENT_URL = environ.get('CLIENT_URL')
 
 
 def require_connstring_dev():

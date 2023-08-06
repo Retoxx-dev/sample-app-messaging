@@ -1,7 +1,13 @@
 import json
 from azure.communication.email import EmailClient
-
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 import settings
+
+template_dir = './email_templates'
+env = Environment(
+    loader=FileSystemLoader(template_dir),
+    autoescape=select_autoescape(['html', 'xml'])
+)
 
 
 def auth_type():
@@ -25,11 +31,14 @@ async def triage_email(message):
 
 async def send_welcome_email(data):
     settings.logging.info(f" [x] Sending welcome email to {data['email_address']}")
+    template = env.get_template('welcome.html')
     message = {
         "content": {
             "subject": "Welcome to our service",
             "plainText": f"Welcome to our service {data['first_name']} {data['last_name']}",
-            "html": f"<html><h1>Welcome to our service {data['first_name']} {data['last_name']}</h1></html>"
+            "html": template.render(first_name=data['first_name'],
+                                    last_name=data['last_name'],
+                                    client_url=settings.CLIENT_URL)
         },
         "recipients": {
             "to": [
@@ -46,11 +55,15 @@ async def send_welcome_email(data):
 
 async def send_password_reset_email(data):
     settings.logging.info(f" [x] Sending password reset email to {data['email_address']}")
+    template = env.get_template('password_reset.html')
+    password_reset_url = f"{settings.CLIENT_URL}/reset-password?token={data['token']}"
     message = {
         "content": {
             "subject": "Password reset",
-            "plainText": f"Hi {data['first_name']} {data['last_name']},\n\nYou have requested a password reset. Please use the following link to reset your password:\n\nhttp://localhost:3000/reset-password?token={data['token']}",
-            "html": f"<html><h1>Hi {data['first_name']} {data['last_name']},</h1><br><p>You have requested a password reset. Please use the following link to reset your password:</p><br><a href='http://localhost:3000/reset-password?token={data['token']}'>https://localhost:3000/reset-password?token={data['token']}</a></html>"
+            "plainText": f"Please use the following link to reset your password:\n\n{password_reset_url}",
+            "html": template.render(first_name=data['first_name'],
+                                    last_name=data['last_name'],
+                                    reset_link=password_reset_url)
         },
         "recipients": {
             "to": [

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Website</title>
+</head>
+<body>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+        <h2>Hello {{ first_name }} {{ last_name }},</h2>
+        <p>Welcome to our website! We are excited to have you as a member of our community.</p>
+        <p>Explore our platform and discover the amazing features we offer.</p>
+        <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
+        <a href="{{ client_url }}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">
+            Go to Dashboard
+        </a>
+        <p>Thank you for joining us. We look forward to providing you with an exceptional experience.</p>
+        <p>Best regards,<br>Your Website Team</p>
+    </div>
+    <div style="margin-top: 40px; font-size: 12px; color: #777;">
+        <p>This email was sent to you as a welcome to our website. If you did not sign up for our platform, please contact our support team immediately.</p>
+    </div>
+</body>
+</html>
