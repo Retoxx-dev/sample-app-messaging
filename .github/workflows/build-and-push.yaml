@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  CONTAINER_REGISTRY_URI: acrsampleapp001.azurecr.io
+  CONTAINER_REGISTRY_URI: acrsampleappneu.azurecr.io
 
 jobs:
   BuildAndPush:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Messaging Docker image
-        run: docker build -t $CONTAINER_REGISTRY_URI/messaging:prod -f ./Dockerfile .
+        run: docker build -t $CONTAINER_REGISTRY_URI/messaging:dev -f ./Dockerfile .
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -26,4 +26,4 @@ jobs:
         run: az acr login --name $CONTAINER_REGISTRY_URI
 
       - name: Push Messaging Docker image
-        run: docker push $CONTAINER_REGISTRY_URI/messaging:prod
+        run: docker push $CONTAINER_REGISTRY_URI/messaging:dev
