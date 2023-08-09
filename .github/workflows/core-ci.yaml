@@ -9,6 +9,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      #TODO: Add docker build job for testing
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
@@ -21,4 +23,13 @@ jobs:
         uses: wearerequired/lint-action@v2
         with:
           flake8: true
-          flake8_args: "--max-line-length=120" 
+          flake8_args: "--max-line-length=120"
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Messaging Docker image
+        run: docker build -t messaging:dev -f ./Dockerfile .

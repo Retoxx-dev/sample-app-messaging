@@ -15,6 +15,6 @@ async def startup_event():
     await receiver.receive_message()
 
 
-@app.get("/healthcheck", status_code=200)
+@app.get("/health", status_code=200)
 async def healthcheck():
     return {"status": "ok"}
