@@ -1,6 +1,11 @@
 ---
-name: FastAPI Messaging CI
-on: [pull_request]
+name: Messaging Build and Test
+on: 
+  pull_request:
+    branches: [ dev, main ]
+
+env:
+  CONTAINER_REGISTRY_URI: acrsampleappneu.azurecr.io
 
 jobs:
   lint:
@@ -30,4 +35,4 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Messaging Docker image
-        run: docker build -t messaging:dev -f ./Dockerfile .
+        run: docker build -t $CONTAINER_REGISTRY_URI/messaging:test -f ./Dockerfile .
