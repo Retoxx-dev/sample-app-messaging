@@ -11,9 +11,9 @@ env = Environment(
 
 
 def auth_type():
-    if (settings.ENV == 'development'):
-        email_client = EmailClient.from_connection_string(settings.EMAIL_CONNECTION_STRING)
-        return email_client
+    # if (settings.ENV == 'development'): Disabled until AKS managed Identity is configured with Azure Comm Services
+    email_client = EmailClient.from_connection_string(settings.EMAIL_CONNECTION_STRING)
+    return email_client
 
 
 async def triage_email(message):
